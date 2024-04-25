@@ -31,6 +31,7 @@ db.on("disconnected", () => {
 });
 // enrutadores
 app.use("/user", userRouter);
+
 // Iniciar el servidor y escuchar en el puerto especificado
 app.listen(PORT, () => {
   console.log(`server running in http://localhost:${PORT}`);

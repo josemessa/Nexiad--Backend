@@ -4,18 +4,27 @@ const User = require("../models/userModel");
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email });
+    console.log(email, password);
+    const user = await User.findOne({ Email: email });
+    console.log(user);
 
-    // Si el usuario existe
-    if ( password === user.password) {    
-      // Responder con éxito: estado 200
-      res.status(200).json({
-        status: "success",
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "Email not registered",
+      });
+    }
+
+    // Compara la contraseña proporcionada con la basede datos
+    if (password === user.Password) {
+      // Inicio de sesión exitoso
+      return res.status(200).json({
+        status: `Welcome ${user.Firstname}`,
         data: user,
       });
     } else {
-      // Si la contraseña no es válida, responder con error
-      return res.status(200).json({
+      // Contraseña incorrecta
+      return res.status(401).json({
         status: "error",
         message: "Invalid email or password",
       });
