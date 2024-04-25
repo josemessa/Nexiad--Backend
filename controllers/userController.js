@@ -30,4 +30,32 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { login };
+const getUsers = async (req, res) => {
+  try {
+    const getAllUsers = await User.find();
+    // Si no hay usuarios encontrados, responder con error
+    if(getAllUsers.length === 0) {
+      return res.status(200).json({
+        status: "success",
+        message: "There are no users",
+        data: [],
+      });
+    }
+    
+    return res.status(200).json({
+      status: "success",
+      data: getAllUsers,
+    });
+  } catch (error) {
+    // En caso de error, responder con estado 400 y mensaje de error
+    return res.status(400).json({
+      status: "error",
+      message: "Error when searching for users",
+      error: error.message,
+    });
+  }
+};
+
+
+
+module.exports = { login, getUsers };
