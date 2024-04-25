@@ -5,7 +5,7 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log(email, password);
-    const user = await User.findOne({ Email: email });
+    const user = await User.findOne({ email: email });
     console.log(user);
 
     if (!user) {
@@ -16,10 +16,10 @@ const login = async (req, res) => {
     }
 
     // Compara la contraseña proporcionada con la basede datos
-    if (password === user.Password) {
+    if (password === user.password) {
       if (user.role === "admin") {
         return res.status(200).json({
-          status: `Welcome ${user.Firstname}`,
+          status: `Welcome ${user.firstname}`,
           data: user,
         });
       } else {

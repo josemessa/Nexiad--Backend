@@ -2,28 +2,28 @@ const mongoose = require("mongoose");
 
 //esquema del usuario
 const userSchema = new mongoose.Schema({
-  Firstname: {
+  firstname: {
     type: String,
     required: true,
   },
-  Surname: {
+  surname: {
     type: String,
     required: true,
   },
-  Birthdate: {
+  birthdate: {
     type: Date,
     required: true,
   },
-  Email: {
+  email: {
     type: String,
     required: true,
     unique: true,
   },
-  Password: {
+  password: {
     type: String,
     required: true,
   },
-  Subscription: {
+  subscription: {
     type: String,
     enum: ["basic", "premium"],
     default: "basic",
