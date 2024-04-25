@@ -17,11 +17,17 @@ const login = async (req, res) => {
 
     // Compara la contraseña proporcionada con la basede datos
     if (password === user.Password) {
-      // Inicio de sesión exitoso
-      return res.status(200).json({
-        status: `Welcome ${user.Firstname}`,
-        data: user,
-      });
+      if (user.role === "admin") {
+        return res.status(200).json({
+          status: `Welcome ${user.Firstname}`,
+          data: user,
+        });
+      } else {
+        return res.status(400).json({
+          status: "Failed",
+          message: "invalid admin credentials"
+        });
+      }
     } else {
       // Contraseña incorrecta
       return res.status(401).json({
