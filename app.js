@@ -10,7 +10,7 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 // Obtener la URL de conexión a la base de datos
 const urlMongo = process.env.DATABASE_URL;
 
@@ -34,11 +34,7 @@ db.on("disconnected", () => {
 // enrutadores
 app.use("/user", userRouter);
 
-app.use(cors({
-  origin: 'http://localhost:4000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+
 // Iniciar el servidor y escuchar en el puerto especificado
 app.listen(PORT, () => {
   console.log(`server running in http://localhost:${PORT}`);
