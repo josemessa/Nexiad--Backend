@@ -2,7 +2,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const userRouter = require("./routers/userRouter");
+const cors= require("cors")
 const PORT = 3000;
+
 // Cargar variables de entorno desde el archivo .env
 require("dotenv").config();
 
@@ -32,7 +34,14 @@ db.on("disconnected", () => {
 // enrutadores
 app.use("/user", userRouter);
 
+app.use(cors({
+  origin: 'http://localhost:4000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 // Iniciar el servidor y escuchar en el puerto especificado
 app.listen(PORT, () => {
   console.log(`server running in http://localhost:${PORT}`);
 });
+
+

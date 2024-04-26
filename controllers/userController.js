@@ -14,20 +14,22 @@ const login = async (req, res) => {
         message: "Email not registered",
       });
     }
-
-    // Compara la contraseña proporcionada con la basede datos
     if (password === user.password) {
-      if (user.role === "admin") {
-        return res.status(200).json({
-          status: `Welcome ${user.firstname}`,
-          data: user,
-        });
-      } else {
-        return res.status(400).json({
-          status: "Failed",
-          message: "invalid admin credentials"
-        });
-      }
+      // if (user.role === "admin") {
+      //   return res.status(200).json({
+      //     status: `Welcome ${user.firstname}`,
+      //     data: user,
+      //   });
+      // } else {
+      //   return res.status(400).json({
+      //     status: "Failed",
+      //     message: "invalid admin credentials"
+      //   });
+      // }
+      return res.status(401).json({
+        status: `Welcome ${user.firstname}`,
+        data: user,
+      });
     } else {
       // Contraseña incorrecta
       return res.status(401).json({
