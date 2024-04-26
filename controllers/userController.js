@@ -1,5 +1,6 @@
 // funcion login
 const User = require("../models/userModel");
+const { generateToken } = require("../utils/util");
 
 const login = async (req, res) => {
   try {
@@ -15,20 +16,21 @@ const login = async (req, res) => {
       });
     }
     if (password === user.password) {
-      // if (user.role === "admin") {
-      //   return res.status(200).json({
-      //     status: `Welcome ${user.firstname}`,
-      //     data: user,
-      //   });
-      // } else {
-      //   return res.status(400).json({
-      //     status: "Failed",
-      //     message: "invalid admin credentials"
-      //   });
-      // }
-      return res.status(401).json({
+      const payload = {
+        userId: user._id,
+        nombre: user.name,
+        email: user.email,
+        role: user.role
+      };
+      const token = generateToken(payload, false);
+      const tokenRefresh = generateToken(payload, true);
+
+      
+      return res.status(200).json({
         status: `Welcome ${user.firstname}`,
         data: user,
+        token: token,
+        token_refresh: tokenRefresh
       });
     } else {
       // Contraseña incorrecta
