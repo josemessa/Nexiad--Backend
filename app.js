@@ -8,6 +8,7 @@ const PORT = 3000;
 require("dotenv").config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 // Obtener la URL de conexión a la base de datos
@@ -31,11 +32,7 @@ db.on("disconnected", () => {
   console.log("Mongo default connection disconnected");
 });
 
-app.use(cors({
-  origin: 'http://localhost:4000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+ 
 // enrutadores
 app.use("/user", userRouter);
 
