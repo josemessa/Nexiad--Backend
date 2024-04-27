@@ -2,15 +2,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const userRouter = require("./routers/userRouter");
-const cors = require('cors');
+const cors= require("cors")
 const PORT = 3000;
+
 // Cargar variables de entorno desde el archivo .env
 require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+app.use(cors());
 // Obtener la URL de conexión a la base de datos
 const urlMongo = process.env.DATABASE_URL;
 
@@ -40,3 +41,5 @@ app.use("/user", userRouter);
 app.listen(PORT, () => {
   console.log(`server running in http://localhost:${PORT}`);
 });
+
+
