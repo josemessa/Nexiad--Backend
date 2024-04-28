@@ -9,6 +9,7 @@ const PORT = 3000;
 require("dotenv").config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(cors());
 // Obtener la URL de conexión a la base de datos
@@ -31,9 +32,10 @@ db.once("connected", () => {
 db.on("disconnected", () => {
   console.log("Mongo default connection disconnected");
 });
+
+ 
 // enrutadores
 app.use("/user", userRouter);
-
 
 // Iniciar el servidor y escuchar en el puerto especificado
 app.listen(PORT, () => {
