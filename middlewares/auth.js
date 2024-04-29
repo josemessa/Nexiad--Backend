@@ -1,18 +1,5 @@
-// Middleware para verificar el rol de administrador
-const verifyRole = (req, res, next) => {
-    try {
-      const role = req.payload.role;
-      if (!role || role === "user" ) {
-        return res
-          .status(403)
-          .send("Access Denied: Administrator permission required");
-      }
-      next();
-    } catch (error) {
-     
-      return res.status(400).send("Role admin not found");
-    }
-  };
+const jwt=require("jsonwebtoken")
+
 
   // Middleware para verificar el token de autenticación
 const verifyToken = (req, res, next) => {
@@ -24,7 +11,8 @@ const verifyToken = (req, res, next) => {
   let payload;
   try {
     payload = jwt.verify(token, process.env.TOKEN_SECRET); // Intenta verificar el token con la clave secreta principal
-    req.payload = payload; // Si la verificación es exitosa, se guarda el payload en la solicitud
+    req.payload = payload;
+     // Si la verificación es exitosa, se guarda el payload en la solicitud
     next(); // Continua con el siguiente middleware o controlador
   } catch (error) {
     try {
@@ -36,4 +24,4 @@ const verifyToken = (req, res, next) => {
     }
   }
 };
-  module.exports= {verifyRole, verifyToken}
+  module.exports= { verifyToken}
