@@ -77,6 +77,31 @@ const getUsers = async (req, res) => {
 };
 
 
+const getMyUser = async (req,res) => {
+  try {
+    const payload = req.payload;
+    console.log(payload);
+    const userId = payload.userId;
+    const myUser = await User.findById(userId);
+    if(!myUser){
+      res.status(204).json({
+        status: "error",
+        message: "user not found",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      data: myUser,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: "Error when searching the user",
+      error: error.message,
+    });
+  }
+}
 
-module.exports = { login, getUsers };
+
+module.exports = { login, getUsers, getMyUser };
 
