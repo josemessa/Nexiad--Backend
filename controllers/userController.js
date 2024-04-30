@@ -51,7 +51,8 @@ const login = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const getAllUsers = await User.find().sort({ firstname: 1 });
+
+    const getAllUsers = await User.find().sort({ surname: 1 });
     // Si no hay usuarios encontrados, responder con error
     if(getAllUsers.length === 0) {
       return res.status(200).json({
