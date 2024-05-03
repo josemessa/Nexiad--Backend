@@ -77,22 +77,37 @@ const getUsers = async (req, res) => {
 
 const addUser = async (req, res) => {
   try {
-    const { firstname, surname, email, birthdate, password } = req.body;
+    const {
+      firstname,
+      surname,
+      adress,
+      city,
+      phone,
+      email,
+      birthdate,
+      password,
+      role
+    } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(password);
+    console.log(hashedPassword);
     const user = new User({
       firstname: firstname,
       surname: surname,
+      adress: adress,
+      city: city,
+      phone: phone,
       email: email,
       birthdate: birthdate,
-      password: await bcrypt.hash(password, 10),
+      password: hashedPassword,
+      role:role
     });
     await user.save();
-   
-      console.log(user);
-      return res.status(200).json({
-        status: "success",
-        data: user,
-      });
-    
+
+    return res.status(201).json({
+      status: "success",
+      data: user,
+    });
   } catch (error) {
     return res.status(400).json({
       status: "error",
