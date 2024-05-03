@@ -1,6 +1,7 @@
 // funcion login
 const User = require("../models/userModel");
 const { generateToken } = require("../utils/util");
+const bcrypt = require("bcrypt");
 
 const login = async (req, res) => {
   try {
@@ -20,17 +21,16 @@ const login = async (req, res) => {
         userId: user._id,
         nombre: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
       };
       const token = generateToken(payload, false);
       const tokenRefresh = generateToken(payload, true);
 
-      
       return res.status(200).json({
         status: `Welcome ${user.firstname}`,
         data: user,
         token: token,
-        token_refresh: tokenRefresh
+        token_refresh: tokenRefresh,
       });
     } else {
       // Contraseña incorrecta
@@ -51,17 +51,16 @@ const login = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-
     const getAllUsers = await User.find().sort({ surname: 1 });
     // Si no hay usuarios encontrados, responder con error
-    if(getAllUsers.length === 0) {
+    if (getAllUsers.length === 0) {
       return res.status(200).json({
         status: "success",
         message: "There are no users",
         data: [],
       });
     }
-    
+
     return res.status(200).json({
       status: "success",
       data: getAllUsers,
@@ -76,7 +75,31 @@ const getUsers = async (req, res) => {
   }
 };
 
+const addUser = async (req, res) => {
+  try {
+    const { firstname, surname, email, birthdate, password } = req.body;
+    const user = new User({
+      firstname: firstname,
+      surname: surname,
+      email: email,
+      birthdate: birthdate,
+      password: await bcrypt.hash(password, 10),
+    });
+    await user.save();
+   
+      console.log(user);
+      return res.status(200).json({
+        status: "success",
+        data: user,
+      });
+    
+  } catch (error) {
+    return res.status(400).json({
+      status: "error",
+      message: "Error adding user to database",
+      error: error.message,
+    });
+  }
+};
 
-
-module.exports = { login, getUsers };
-
+module.exports = { login, getUsers, addUser };
