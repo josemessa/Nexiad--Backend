@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   },
   birthdate: {
     type: Date,
-    required: true,
+    default: "Fecha de nacimiento no disponible"
   },
   email: {
     type: String,
@@ -22,6 +22,18 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+  },
+  adress:{
+    type: String,    
+    default: "Direccion no disponible"
+  },
+  city:{
+    type: String,
+    default: "Ciudad no disponible"
+  },
+  phone:{
+    type: String,
+    required: true
   },
   subscription: {
     type: String,

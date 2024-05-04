@@ -9,7 +9,6 @@ const PORT = 3000;
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 app.use(cors());
 // Obtener la URL de conexión a la base de datos
