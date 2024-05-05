@@ -141,5 +141,61 @@ const getMyUser = async (req,res) => {
   }
 }
 
+const disableAccess = async (req,res) => {
+  try {
+   const userId = req.params.id;
+   const user = await User.findById(userId);
+   if(!user){
+    return res.status(204).json({
+      status: "error",
+      mssage: "user id does not exist",
+    })
+   }
+   user.role = "disable";
+   await user.save();
+   res.status(200).json({
+    status: "success",
+    data: user,
+   })
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: "Error when disable access the user",
+      error: error.message,
+    });
+  }
+}
 
-module.exports = { login, getUsers, addUser, getMyUser };
+const disableAdminAccess = async (req,res) => {
+  try {
+   const userId = req.params.id;
+   const user = await User.findById(userId);
+   if(!user){
+    return res.status(204).json({
+      status: "error",
+      mssage: "user id does not exist",
+    })
+   }
+   if(user.role === "user"){
+    res.status(200).json({
+      status: "error",
+      message: "This user does not have admin permissions",
+    })
+   }
+   user.role = "user";
+   await user.save();
+   res.status(200).json({
+    status: "success",
+    data: user,
+   })
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: "Error when disable access the user",
+      error: error.message,
+    });
+  }
+}
+
+
+module.exports = { login, getUsers, addUser, getMyUser, disableAdminAccess, disableAccess };
