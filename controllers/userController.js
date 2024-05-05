@@ -1,4 +1,4 @@
-// funcion login
+
 const User = require("../models/userModel");
 const { generateToken } = require("../utils/util");
 const bcrypt = require("bcrypt");
@@ -141,5 +141,26 @@ const getMyUser = async (req,res) => {
   }
 }
 
-
-module.exports = { login, getUsers, addUser, getMyUser };
+const deleteUser= async (req, res)=>{
+try {
+  const userId= req.params.id
+  const userToDelete= await User.findByIdAndDelete(userId)
+  if(!userToDelete){
+    return res.status(204).json({
+      status: "success",
+      message: "user not found by ID"
+    })
+  }
+  return res.status(200).json({
+    status:"User deleted successfully",
+    data: userToDelete
+  })  
+} catch (error) {
+  res.status(400).json({
+    status: "error",
+    message: "User not deleted",
+    error: error.message,
+  });
+}
+}
+module.exports = { login, getUsers, addUser, getMyUser, deleteUser };
