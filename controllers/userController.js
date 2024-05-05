@@ -57,7 +57,6 @@ const getUsers = async (req, res) => {
       return res.status(200).json({
         status: "success",
         message: "There are no users",
-        data: [],
       });
     }
 
@@ -141,6 +140,7 @@ const getMyUser = async (req,res) => {
   }
 }
 
+
 const deleteUser= async (req, res)=>{
 try {
   const userId= req.params.id
@@ -163,4 +163,30 @@ try {
   });
 }
 }
-module.exports = { login, getUsers, addUser, getMyUser, deleteUser };
+
+const getUserById = async (req,res) => {
+  try {
+    const userId = req.params.id
+    console.log(userId);
+    const theUser = await User.findById(userId);
+    if(!theUser){
+      res.status(204).json({
+        status: "error",
+        message: "user not found",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      data: theUser,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: "Error when searching the user",
+      error: error.message,
+    });
+  }
+}
+
+
+module.exports = { login, getUsers, addUser, getMyUser, getUserById, deleteUser };

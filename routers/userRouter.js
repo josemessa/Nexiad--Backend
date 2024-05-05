@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const { login, getUsers , addUser, getMyUser, deleteUser} = require("../controllers/userController");
+const { login, getUsers , addUser, getMyUser, getUserById, deleteUser} = require("../controllers/userController");
+
 const { verifyToken } = require("../middlewares/auth");
 
 
@@ -8,6 +9,8 @@ router.get("/getusers", verifyToken, getUsers);
 router.get("/getmyuser", verifyToken, getMyUser);
 router.post("/", verifyToken, addUser )
 router.delete("/:id", verifyToken, deleteUser)
+router.get("/:id/getuserbyid", getUserById);
+
 
 
 
