@@ -15,5 +15,4 @@ router.get("/:id/getuserbyid", getUserById);
 
 
 
-
 module.exports = router;
