@@ -11,7 +11,7 @@ router.patch("/:id/disableadmin", disableAdminAccess);
 router.patch("/:id/disableaccess", disableAccess);
 router.post("/", verifyToken, addUser )
 router.delete("/:id", verifyToken, deleteUser)
-router.get("/:id/getuserbyid", getUserById);
+router.get("/:id", getUserById);
 
 
 
