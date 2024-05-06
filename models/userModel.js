@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema({
   },
   birthdate: {
     type: Date,
-    default: "Fecha de nacimiento no disponible"
   },
   email: {
     type: String,
