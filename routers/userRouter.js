@@ -9,7 +9,7 @@ router.get("/getusers", verifyToken, getUsers);
 router.get("/getmyuser", verifyToken, getMyUser);
 router.post("/", verifyToken, addUser )
 router.delete("/:id", verifyToken, deleteUser)
-router.get("/:id/getuserbyid", getUserById);
+router.get("/:id", getUserById);
 
 
 
