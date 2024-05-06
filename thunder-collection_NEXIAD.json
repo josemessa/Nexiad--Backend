@@ -1,0 +1,67 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "NEXIAD",
+    "collectionId": "8650e0e7-9f65-47d0-8b9f-722bb4b6e849",
+    "dateExported": "2024-05-05T20:36:01.783Z",
+    "version": "1.2",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "c348ddb6-80da-4f15-b1fd-bcb4737ec2dc",
+            "colId": "8650e0e7-9f65-47d0-8b9f-722bb4b6e849",
+            "containerId": "",
+            "name": "ADDUSER",
+            "url": "http://localhost:3000/user/",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-05-02T21:08:38.142Z",
+            "modified": "2024-05-03T10:01:52.674Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjJhNjAwYmVlMzFhMDIxOTg0ZjEwODIiLCJlbWFpbCI6Impvc2VtZXNhbWFyaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzE0NzMwMzc5LCJleHAiOjE3MTQ3MzIxNzl9.pEPcyMLTKV-axNoohCUWSUoJtFj93t8vZpHiVnUd3GU"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"firstname\": \"David\",\n  \"surname\": \"Gutierrez\",\n  \"email\": \"davilillo@gmail.com\",\n  \"phone\": \"6256454\",\n  \"birthdate\": \"01-01-2006\",\n  \"password\": \"5678\",\n  \"role\": \"admin\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "d961c513-4711-4efe-adbd-bf5acaa5ab1b",
+            "colId": "8650e0e7-9f65-47d0-8b9f-722bb4b6e849",
+            "containerId": "",
+            "name": "DELETE USER",
+            "url": "http://localhost:3000/user/6634b7b405462336a10dcbe4",
+            "method": "DELETE",
+            "sortNum": 30000,
+            "created": "2024-05-05T20:29:21.760Z",
+            "modified": "2024-05-05T20:35:10.703Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjJhNjAwYmVlMzFhMDIxOTg0ZjEwODIiLCJlbWFpbCI6Impvc2VtZXNhbWFyaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzE0OTQxMTkzLCJleHAiOjE3MTQ5NDI5OTN9.R7mSz5ycvAIND4nl21iXh-ZgKzqN2TnDBnLQcSOh-OI"
+                }
+            ]
+        },
+        {
+            "_id": "d1bc268d-7216-4b6b-9b70-4047ab676760",
+            "colId": "8650e0e7-9f65-47d0-8b9f-722bb4b6e849",
+            "containerId": "",
+            "name": "LOGIN",
+            "url": "http://localhost:3000/user/login",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2024-05-05T20:30:06.335Z",
+            "modified": "2024-05-05T20:33:13.285Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"josemesamarin@gmail.com\",\n  \"password\": \"1234\"\n}",
+                "form": []
+            }
+        }
+    ],
+    "ref": "UM5B7xZjY1daNtwqKG73oNO8nupTKn80aXgx0b072sO4T1vOqQSLIxriXGZU6JZH4II6PBlyHercuqnOopjWyg"
+}
