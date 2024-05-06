@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   birthdate: {
-    type: Date,
+    type: String,
     default: "Fecha de nacimiento no disponible"
   },
   email: {
@@ -41,7 +41,8 @@ const userSchema = new mongoose.Schema({
     default: "basic",
   },
   role: {
-    type: String,
+    type: String,  
+    enum: [ "user", "admin", "disable" ],
     default: "user",
   },
 });
