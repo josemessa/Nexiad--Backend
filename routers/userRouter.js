@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { login, getUsers , addUser, getMyUser, getUserById, deleteUser} = require("../controllers/userController");
+const { login, getUsers , addUser, getMyUser, getUserById, deleteUser, disableAccess, disableAdminAccess} = require("../controllers/userController");
 
 const { verifyToken } = require("../middlewares/auth");
 
@@ -10,6 +10,8 @@ router.get("/getmyuser", verifyToken, getMyUser);
 router.post("/", verifyToken, addUser )
 router.delete("/:id", verifyToken, deleteUser)
 router.get("/:id", getUserById);
+router.patch("/:id/disableadmin", disableAdminAccess);
+router.patch("/:id/disableaccess", disableAccess);
 
 
 
