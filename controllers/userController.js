@@ -1,5 +1,6 @@
 
 const User = require("../models/userModel");
+const sendEmail = require("../services/emailsignup");
 const { generateToken } = require("../utils/util");
 const bcrypt = require("bcrypt");
 
@@ -9,6 +10,7 @@ const login = async (req, res) => {
     console.log(email, password);
     const user = await User.findOne({ email: email });
     console.log(user);
+    const hashedPassword= await bcrypt.compare(password, user.password)
 
     if (!user) {
       return res.status(404).json({
@@ -16,7 +18,7 @@ const login = async (req, res) => {
         message: "Email not registered",
       });
     }
-    if (password === user.password) {
+    if (hashedPassword) {
       const payload = {
         userId: user._id,
         nombre: user.name,
@@ -114,7 +116,47 @@ const addUser = async (req, res) => {
     });
   }
 };
+const addUserFromLogin = async (req, res) => {
+  try {
+    const {
+      firstname,
+      surname,
+      adress,
+      city,
+      phone,
+      email,
+      birthdate,
+      password
+    } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(password);
+    console.log(hashedPassword);
+    const user = new User({
+      firstname: firstname,
+      surname: surname,
+      adress: adress,
+      city: city,
+      phone: phone,
+      email: email,
+      birthdate: birthdate,
+      password: hashedPassword
+    });
 
+    await user.save();
+    sendEmail(user.email, "Bienvenido a Nexiad", "Gracias por registrarte en NEXIAD, ya puedes comenzar a disfrutar de nuestros serviciosd")
+    return res.status(201).json({
+      status: "success",
+      data: user,
+    });
+  } catch (error) {
+
+    return res.status(400).json({
+      status: "error",
+      message: "Error adding user to database",
+      error: error.message,
+    });
+  }
+};
 const getMyUser = async (req,res) => {
   try {
     const payload = req.payload;
@@ -139,6 +181,7 @@ const getMyUser = async (req,res) => {
     });
   }
 }
+
 
 
 const deleteUser= async (req, res)=>{
@@ -245,4 +288,4 @@ const disableAdminAccess = async (req,res) => {
 }
 
 
-module.exports = { login, getUsers, addUser, getMyUser, getUserById, deleteUser, disableAdminAccess, disableAccess };
+module.exports = { login, getUsers, addUser, addUserFromLogin, getMyUser, getUserById, deleteUser, disableAdminAccess, disableAccess };

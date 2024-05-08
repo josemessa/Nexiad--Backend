@@ -36,8 +36,8 @@ const userSchema = new mongoose.Schema({
   },
   subscription: {
     type: String,
-    enum: ["basic", "premium"],
-    default: "basic",
+    enum: ["basic", "premium","free"],
+    default: "free",
   },
   role: {
     type: String,
