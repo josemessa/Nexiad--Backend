@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { login, getUsers , addUser,addUserFromLogin, getMyUser, getUserById, deleteUser, disableAccess, disableAdminAccess} = require("../controllers/userController");
+const { login, getUsers , addUser,addUserFromLogin, getMyUser, getUserById, deleteUser, disableAccess, disableAdminAccess, editUser} = require("../controllers/userController");
 
 const { verifyToken } = require("../middlewares/auth");
 
@@ -13,6 +13,7 @@ router.delete("/:id", verifyToken, deleteUser)
 router.get("/:id", getUserById);
 router.patch("/:id/disableadmin", disableAdminAccess);
 router.patch("/:id/disableaccess", disableAccess);
+router.patch("/:id/edituser", editUser);
 
 
 

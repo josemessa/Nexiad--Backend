@@ -287,5 +287,53 @@ const disableAdminAccess = async (req,res) => {
   }
 }
 
+const editUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
 
-module.exports = { login, getUsers, addUser, addUserFromLogin, getMyUser, getUserById, deleteUser, disableAdminAccess, disableAccess };
+    if (!user) {
+      return res.status(204).json({
+        status: "error",
+        message: "User id does not exist",
+      });
+    }
+
+    const { firstname, surname, address, city, phone, email, birthdate } = req.body;
+
+    if (firstname !== user.firstname) {
+      user.firstname = firstname;
+    }
+    if (surname !== user.surname) {
+      user.surname = surname;
+    }
+    if (address !== user.address) {
+      user.address = address;
+    }
+    if (phone !== user.phone) {
+      user.phone = phone;
+    }
+    if (email !== user.email) {
+      user.email = email;
+    }
+    if (birthdate !== user.birthdate) {
+      user.birthdate = birthdate;
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: "Error when disabling access to the user",
+      error: error.message,
+    });
+  }
+};
+
+
+module.exports = { login, getUsers, addUser, addUserFromLogin, getMyUser, getUserById, deleteUser, disableAdminAccess, disableAccess, editUser };
