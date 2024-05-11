@@ -335,5 +335,4 @@ const editUser = async (req, res) => {
   }
 };
 
-
 module.exports = { login, getUsers, addUser, addUserFromLogin, getMyUser, getUserById, deleteUser, disableAdminAccess, disableAccess, editUser };

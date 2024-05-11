@@ -2,6 +2,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const userRouter = require("./routers/userRouter");
+const subscriptionRouter = require("./routers/subscriptionRouter")
 const cors= require("cors")
 const PORT = 3000;
 
@@ -35,6 +36,7 @@ db.on("disconnected", () => {
  
 // enrutadores
 app.use("/user", userRouter);
+app.use("/subscription", subscriptionRouter);
 
 // Iniciar el servidor y escuchar en el puerto especificado
 app.listen(PORT, () => {
