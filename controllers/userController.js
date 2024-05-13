@@ -53,7 +53,7 @@ const login = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const getAllUsers = await User.find().sort({ surname: 1 });
+    const getAllUsers = await User.find().populate("subscription").sort({ surname: 1 });
     // Si no hay usuarios encontrados, responder con error
     if (getAllUsers.length === 0) {
       return res.status(200).json({
@@ -162,7 +162,7 @@ const getMyUser = async (req,res) => {
     const payload = req.payload;
     console.log(payload);
     const userId = payload.userId;
-    const myUser = await User.findById(userId);
+    const myUser = await User.findById(userId).populate("subscription");
     if(!myUser){
       res.status(204).json({
         status: "error",
@@ -211,7 +211,7 @@ const getUserById = async (req,res) => {
   try {
     const userId = req.params.id
     console.log(userId);
-    const theUser = await User.findById(userId);
+    const theUser = await User.findById(userId).populate("subscription");
     if(!theUser){
       res.status(204).json({
         status: "error",
@@ -334,6 +334,5 @@ const editUser = async (req, res) => {
     });
   }
 };
-
 
 module.exports = { login, getUsers, addUser, addUserFromLogin, getMyUser, getUserById, deleteUser, disableAdminAccess, disableAccess, editUser };

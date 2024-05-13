@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Subscription = require("./subscriptionModel")
+
 
 //esquema del usuario
 const userSchema = new mongoose.Schema({
@@ -35,9 +37,9 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   subscription: {
-    type: String,
-    enum: ["basic", "premium","free"],
-    default: "free",
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Subscription',
+    default: "663e18c3862df917fabb5541",
   },
   role: {
     type: String,
