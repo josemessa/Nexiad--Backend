@@ -165,11 +165,11 @@ const addUserFromLogin = async (req, res) => {
     });
 
     await user.save();
-    // sendEmail(
-    //   user.email,
-    //   "Bienvenido a Nexiad",
-    //   "Gracias por registrarte en NEXIAD, ya puedes comenzar a disfrutar de nuestros serviciosd"
-    // );
+    sendEmail(
+      user.email,
+      "Bienvenido a Nexiad",
+      "Gracias por registrarte en NEXIAD, ya puedes comenzar a disfrutar de nuestros serviciosd"
+    );
     return res.status(201).json({
       status: "success",
       data: user,
