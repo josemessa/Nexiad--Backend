@@ -1,27 +1,25 @@
-const jwt=require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
-
-  // Middleware para verificar el token de autenticación
 const verifyToken = (req, res, next) => {
   const token = req.header("auth-token");
   if (!token) {
-    return res.status(401).send("Acceso denegado: No se proporcionó token"); // Si no hay token, se devuelve un error de acceso denegado
+    return res.status(401).send("Acceso denegado: No se proporcionó token");
   }
 
   let payload;
   try {
-    payload = jwt.verify(token, process.env.TOKEN_SECRET); // Intenta verificar el token con la clave secreta principal
+    payload = jwt.verify(token, process.env.TOKEN_SECRET);
     req.payload = payload;
-     // Si la verificación es exitosa, se guarda el payload en la solicitud
-    next(); // Continua con el siguiente middleware o controlador
+
+    next();
   } catch (error) {
     try {
-      payload = jwt.verify(token, process.env.TOKEN_REFRESH); // Si la verificación anterior falla, intenta verificar con la clave de refresco
+      payload = jwt.verify(token, process.env.TOKEN_REFRESH);
       req.payload = payload;
       next();
     } catch (error) {
-      return res.status(400).send("Token inválido"); // Si ambos intentos fallan, se devuelve un error de token inválido
+      return res.status(400).send("Token inválido");
     }
   }
 };
-  module.exports= { verifyToken}
+module.exports = { verifyToken };

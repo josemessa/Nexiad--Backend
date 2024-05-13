@@ -1,5 +1,5 @@
-
 const User = require("../models/userModel");
+const Authorization = require("../models/authorizationModel");
 const sendEmail = require("../services/emailsignup");
 const { generateToken } = require("../utils/util");
 const bcrypt = require("bcrypt");
@@ -10,7 +10,7 @@ const login = async (req, res) => {
     console.log(email, password);
     const user = await User.findOne({ email: email });
     console.log(user);
-    const hashedPassword= await bcrypt.compare(password, user.password)
+    const hashedPassword = await bcrypt.compare(password, user.password);
 
     if (!user) {
       return res.status(404).json({
@@ -53,7 +53,9 @@ const login = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const getAllUsers = await User.find().populate("subscription").sort({ surname: 1 });
+    const getAllUsers = await User.find()
+      .populate("subscription")
+      .sort({ surname: 1 });
     // Si no hay usuarios encontrados, responder con error
     if (getAllUsers.length === 0) {
       return res.status(200).json({
@@ -87,11 +89,17 @@ const addUser = async (req, res) => {
       email,
       birthdate,
       password,
-      role
+      role,
     } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(password);
-    console.log(hashedPassword);
+    const alredyRegistered = await User.findOne({ email: email });
+
+    if (alredyRegistered) {
+      return res.status(409).json({
+        status: "conflict",
+        message: "El email ya está autorizado",
+      });
+    }
     const user = new User({
       firstname: firstname,
       surname: surname,
@@ -101,7 +109,7 @@ const addUser = async (req, res) => {
       email: email,
       birthdate: birthdate,
       password: hashedPassword,
-      role:role
+      role: role,
     });
     await user.save();
     return res.status(201).json({
@@ -126,11 +134,24 @@ const addUserFromLogin = async (req, res) => {
       phone,
       email,
       birthdate,
-      password
+      password,
     } = req.body;
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(password);
-    console.log(hashedPassword);
+    const alreadyAuthorized = await Authorization.findOne({ email: email });
+    const alredyRegistered = await User.findOne({ email: email });
+    if (alredyRegistered) {
+      return res.status(409).json({
+        status: "conflict",
+        message: "El email ya está autorizado",
+      });
+    }
+    let role = "";
+    if (alreadyAuthorized) {
+      role = "admin";
+    } else {
+      role = "user";
+    }
     const user = new User({
       firstname: firstname,
       surname: surname,
@@ -139,17 +160,21 @@ const addUserFromLogin = async (req, res) => {
       phone: phone,
       email: email,
       birthdate: birthdate,
-      password: hashedPassword
+      password: hashedPassword,
+      role: role,
     });
 
     await user.save();
-    sendEmail(user.email, "Bienvenido a Nexiad", "Gracias por registrarte en NEXIAD, ya puedes comenzar a disfrutar de nuestros serviciosd")
+    // sendEmail(
+    //   user.email,
+    //   "Bienvenido a Nexiad",
+    //   "Gracias por registrarte en NEXIAD, ya puedes comenzar a disfrutar de nuestros serviciosd"
+    // );
     return res.status(201).json({
       status: "success",
       data: user,
     });
   } catch (error) {
-
     return res.status(400).json({
       status: "error",
       message: "Error adding user to database",
@@ -157,13 +182,13 @@ const addUserFromLogin = async (req, res) => {
     });
   }
 };
-const getMyUser = async (req,res) => {
+const getMyUser = async (req, res) => {
   try {
     const payload = req.payload;
     console.log(payload);
     const userId = payload.userId;
     const myUser = await User.findById(userId).populate("subscription");
-    if(!myUser){
+    if (!myUser) {
       res.status(204).json({
         status: "error",
         message: "user not found",
@@ -180,39 +205,37 @@ const getMyUser = async (req,res) => {
       error: error.message,
     });
   }
-}
+};
 
-
-
-const deleteUser= async (req, res)=>{
-try {
-  const userId= req.params.id
-  const userToDelete= await User.findByIdAndDelete(userId)
-  if(!userToDelete){
-    return res.status(204).json({
-      status: "success",
-      message: "user not found by ID"
-    })
-  }
-  return res.status(200).json({
-    status:"User deleted successfully",
-    data: userToDelete
-  })  
-} catch (error) {
-  res.status(400).json({
-    status: "error",
-    message: "User not deleted",
-    error: error.message,
-  });
-}
-}
-
-const getUserById = async (req,res) => {
+const deleteUser = async (req, res) => {
   try {
-    const userId = req.params.id
+    const userId = req.params.id;
+    const userToDelete = await User.findByIdAndDelete(userId);
+    if (!userToDelete) {
+      return res.status(204).json({
+        status: "success",
+        message: "user not found by ID",
+      });
+    }
+    return res.status(200).json({
+      status: "User deleted successfully",
+      data: userToDelete,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: "User not deleted",
+      error: error.message,
+    });
+  }
+};
+
+const getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
     console.log(userId);
     const theUser = await User.findById(userId).populate("subscription");
-    if(!theUser){
+    if (!theUser) {
       res.status(204).json({
         status: "error",
         message: "user not found",
@@ -229,55 +252,24 @@ const getUserById = async (req,res) => {
       error: error.message,
     });
   }
-}
+};
 
-const disableAccess = async (req,res) => {
+const disableAccess = async (req, res) => {
   try {
-   const userId = req.params.id;
-   const user = await User.findById(userId);
-   if(!user){
-    return res.status(204).json({
-      status: "error",
-      mssage: "user id does not exist",
-    })
-   }
-   user.role = "disable";
-   await user.save();
-   res.status(200).json({
-    status: "success",
-    data: user,
-   })
-  } catch (error) {
-    res.status(400).json({
-      status: "error",
-      message: "Error when disable access the user",
-      error: error.message,
-    });
-  }
-}
-
-const disableAdminAccess = async (req,res) => {
-  try {
-   const userId = req.params.id;
-   const user = await User.findById(userId);
-   if(!user){
-    return res.status(204).json({
-      status: "error",
-      mssage: "user id does not exist",
-    })
-   }
-   if(user.role === "user"){
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(204).json({
+        status: "error",
+        mssage: "user id does not exist",
+      });
+    }
+    user.role = "disable";
+    await user.save();
     res.status(200).json({
-      status: "error",
-      message: "This user does not have admin permissions",
-    })
-   }
-   user.role = "user";
-   await user.save();
-   res.status(200).json({
-    status: "success",
-    data: user,
-   })
+      status: "success",
+      data: user,
+    });
   } catch (error) {
     res.status(400).json({
       status: "error",
@@ -285,7 +277,38 @@ const disableAdminAccess = async (req,res) => {
       error: error.message,
     });
   }
-}
+};
+
+const disableAdminAccess = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(204).json({
+        status: "error",
+        mssage: "user id does not exist",
+      });
+    }
+    if (user.role === "user") {
+      res.status(200).json({
+        status: "error",
+        message: "This user does not have admin permissions",
+      });
+    }
+    user.role = "user";
+    await user.save();
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: "Error when disable access the user",
+      error: error.message,
+    });
+  }
+};
 
 const editUser = async (req, res) => {
   try {
@@ -299,7 +322,8 @@ const editUser = async (req, res) => {
       });
     }
 
-    const { firstname, surname, address, city, phone, email, birthdate } = req.body;
+    const { firstname, surname, address, city, phone, email, birthdate } =
+      req.body;
 
     if (firstname !== user.firstname) {
       user.firstname = firstname;
@@ -335,4 +359,15 @@ const editUser = async (req, res) => {
   }
 };
 
-module.exports = { login, getUsers, addUser, addUserFromLogin, getMyUser, getUserById, deleteUser, disableAdminAccess, disableAccess, editUser };
+module.exports = {
+  login,
+  getUsers,
+  addUser,
+  addUserFromLogin,
+  getMyUser,
+  getUserById,
+  deleteUser,
+  disableAdminAccess,
+  disableAccess,
+  editUser,
+};
