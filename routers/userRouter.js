@@ -21,8 +21,8 @@ router.post("/signup", verifyToken, addUser);
 router.post("/signupuser", addUserFromLogin);
 router.delete("/:id", verifyToken, deleteUser);
 router.get("/:id", getUserById);
-router.patch("/:id/disableadmin", disableAdminAccess);
-router.patch("/:id/disableaccess", disableAccess);
-router.patch("/:id/edituser", editUser);
+router.patch("/:id/disableadmin", verifyToken, disableAdminAccess);
+router.patch("/:id/disableaccess", verifyToken, disableAccess);
+router.patch("/:id/edituser", verifyToken, editUser);
 
 module.exports = router;
