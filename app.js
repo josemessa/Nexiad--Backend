@@ -2,7 +2,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const userRouter = require("./routers/userRouter");
-const cors= require("cors")
+const subscriptionRouter = require("./routers/subscriptionRouter");
+const authorizationRouter = require("./routers/authorizationRouter");
+const cors = require("cors");
 const PORT = 3000;
 
 // Cargar variables de entorno desde el archivo .env
@@ -32,13 +34,12 @@ db.on("disconnected", () => {
   console.log("Mongo default connection disconnected");
 });
 
- 
 // enrutadores
 app.use("/user", userRouter);
+app.use("/subscription", subscriptionRouter);
+app.use("/authorization", authorizationRouter);
 
 // Iniciar el servidor y escuchar en el puerto especificado
 app.listen(PORT, () => {
   console.log(`server running in http://localhost:${PORT}`);
 });
-
-
